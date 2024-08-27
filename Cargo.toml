@@ -2,7 +2,7 @@
 name = "chrome_launcher"
 version = "0.1.0"
 edition = "2021"
-authors = "chouzz"
+authors = ["chouzz"]
 description = "Launch google chrome with rust"
 keywords = ["chrome"]
 readme = "README.md"
