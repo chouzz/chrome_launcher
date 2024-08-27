@@ -12,7 +12,8 @@ repository = "https://github.com/chouzz/chrome_launcher"
 
 [lib]
 name = "chrome_launcher"
-crate-type = ["lib"] 
+crate-type = ["lib"]
+path = "src/lib.rs"
 
 [dependencies]
 home = "0.5.9"
