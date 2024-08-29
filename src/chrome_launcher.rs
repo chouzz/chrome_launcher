@@ -74,9 +74,9 @@ impl Launcher {
 
     pub fn launch(&mut self) -> Result<LaunchedChrome, String> {
         let chrome_path = if let Some(ref path) = self.chrome_path {
-            path.as_str() // 如果存在，获取 &str
+            path.as_str()
         } else {
-            &self.get_chrome_path()? // 如果不存在，调用 get_chrome_path
+            &self.get_chrome_path()?
         };
         let mut command = Command::new(chrome_path);
 
@@ -113,7 +113,6 @@ impl Launcher {
             return Err("Unknown operating system".to_string());
         };
 
-        // 使用 Option 的 map 方法直接处理返回值
         chrome_path.ok_or_else(|| "Chrome path not found".to_string())
     }
 
@@ -146,7 +145,6 @@ impl Launcher {
     }
 
     fn cleanup(&self) {
-        // 清理临时目录或文件
         let dir = PathBuf::from(self.user_data_dir.clone());
         if dir.exists() {
             let _ = fs::remove_dir_all(dir);
