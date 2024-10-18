@@ -6,6 +6,7 @@ authors = ["chouzz"]
 description = "Launch google chrome with rust"
 keywords = ["chrome"]
 readme = "README.md"
+license = "Apache-2.0"
 repository = "https://github.com/chouzz/chrome_launcher"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
