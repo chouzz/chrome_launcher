@@ -3,7 +3,7 @@
 version = 3
 
 [[package]]
-name = "chrome-launcher"
+name = "chrome_launcher"
 version = "0.1.0"
 dependencies = [
  "home",
