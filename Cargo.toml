@@ -15,6 +15,11 @@ repository = "https://github.com/chouzz/chrome_launcher"
 name = "chrome_launcher"
 crate-type = ["lib"]
 
+[[bin]]
+name = "chrome_launcher_cli"
+path = "src/cli.rs"
+
 [dependencies]
+clap = { version = "4.5.20", features = ["derive"] }
 home = "0.5.9"
 serde_json = "1.0.127"
