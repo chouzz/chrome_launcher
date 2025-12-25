@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [v1.0.0] - 2025-12-25
 
 ### Added
+- **Project Rename**: Renamed from `chrome_launcher` to `browser_launcher` to reflect multi-browser support
 - **Multi-browser support**: Chrome, Chromium, Edge, Brave, Opera, Vivaldi
 - **Cross-platform browser detection**: Windows, macOS, Linux with automatic path resolution
 - **Enhanced CLI**: 20+ command line options including `--browser`, `--headless`, `--window-size`, security controls

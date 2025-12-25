@@ -23,7 +23,7 @@ Add this to your `Cargo.toml`:
 
 ```toml
 [dependencies]
-browser_launcher = "0.2.0"
+browser_launcher = "1.0.0"
 ```
 
 ### As a CLI Tool
