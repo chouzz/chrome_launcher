@@ -1,6 +1,6 @@
 [package]
 name = "chrome_launcher"
-version = "0.2.0"
+version = "1.0.0"
 edition = "2021"
 authors = ["chouzz"]
 description = "A cross-platform Rust library for launching Chromium-based browsers with extensive configuration options"
