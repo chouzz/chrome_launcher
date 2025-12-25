@@ -1,3 +1,4 @@
+#[cfg(target_os = "linux")]
 use home::home_dir;
 use std::env;
 use std::path::Path;
