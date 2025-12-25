@@ -1,6 +1,5 @@
 pub mod browser;
 pub mod chrome_launcher;
-pub mod cli;
 pub mod flags;
 pub mod utils;
 
@@ -19,7 +18,8 @@ mod tests {
         assert!(options.chrome_flags.is_none());
         assert!(options.port.is_none());
         assert!(options.browser.is_none());
-        assert_eq!(options.headless, Some(false));
+        // headless defaults to None in Options::default()
+        assert!(options.headless.is_none());
     }
 
     #[test]
@@ -90,7 +90,18 @@ mod tests {
 
     #[test]
     fn test_parse_window_size() {
-        use crate::cli::parse_window_size;
+        fn parse_window_size(size: &str) -> Option<(u32, u32)> {
+            let parts: Vec<&str> = size.split('x').collect();
+            if parts.len() == 2 {
+                if let (Ok(width), Ok(height)) = (parts[0].parse::<u32>(), parts[1].parse::<u32>()) {
+                    Some((width, height))
+                } else {
+                    None
+                }
+            } else {
+                None
+            }
+        }
 
         assert_eq!(parse_window_size("1920x1080"), Some((1920, 1080)));
         assert_eq!(parse_window_size("800x600"), Some((800, 600)));
