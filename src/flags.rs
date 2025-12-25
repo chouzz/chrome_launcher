@@ -1,8 +1,8 @@
-// Default Chrome flags
+// Default Chromium-based browser flags
 pub const DEFAULT_FLAGS: &[&str] = &[
     // Disable built-in Google Translate service
     "--disable-features=Translate",
-    // Disable all chrome extensions
+    // Disable all browser extensions
     "--disable-extensions",
     // Disable some extensions that aren't affected by --disable-extensions
     "--disable-component-extensions-with-background-pages",

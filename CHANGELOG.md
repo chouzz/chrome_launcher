@@ -30,7 +30,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Added chrome_launcher_cli command line tools.
+- Added browser_launcher_cli command line tools.
 
 ## [v0.1.0] - 2025-12-25
 

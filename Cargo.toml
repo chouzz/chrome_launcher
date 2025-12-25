@@ -1,25 +1,25 @@
 [package]
-name = "chrome_launcher"
+name = "browser_launcher"
 version = "1.0.0"
 edition = "2021"
 authors = ["chouzz"]
-description = "A cross-platform Rust library for launching Chromium-based browsers with extensive configuration options"
-keywords = ["chrome", "chromium", "browser", "launcher", "automation"]
+description = "A cross-platform Rust library for launching browsers with extensive configuration options"
+keywords = ["browser", "launcher", "automation", "chrome", "edge", "safari"]
 categories = ["api-bindings", "command-line-utilities"]
 readme = "README.md"
 license = "Apache-2.0"
-repository = "https://github.com/chouzz/chrome_launcher"
-homepage = "https://github.com/chouzz/chrome_launcher"
-documentation = "https://docs.rs/chrome_launcher"
+repository = "https://github.com/chouzz/browser_launcher"
+homepage = "https://github.com/chouzz/browser_launcher"
+documentation = "https://docs.rs/browser_launcher"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [lib]
-name = "chrome_launcher"
+name = "browser_launcher"
 crate-type = ["lib"]
 
 [[bin]]
-name = "chrome_launcher_cli"
+name = "browser_launcher_cli"
 path = "src/main.rs"
 
 [dependencies]

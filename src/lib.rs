@@ -1,10 +1,11 @@
 pub mod browser;
-pub mod chrome_launcher;
+pub mod browser_launcher;
+pub mod cli;
 pub mod flags;
 pub mod utils;
 
 pub use browser::{Browser, BrowserFinder, BrowserType};
-pub use chrome_launcher::{Launcher, Options};
+pub use browser_launcher::{Launcher, Options};
 
 #[cfg(test)]
 mod tests {
@@ -15,7 +16,7 @@ mod tests {
     fn test_options_default() {
         let options = Options::default();
         assert!(options.starting_url.is_none());
-        assert!(options.chrome_flags.is_none());
+        assert!(options.browser_flags.is_none());
         assert!(options.port.is_none());
         assert!(options.browser.is_none());
         // headless defaults to None in Options::default()
@@ -130,7 +131,7 @@ mod tests {
         options.proxy_server = Some("http://proxy:8080".to_string());
         options.host_resolver_rules = Some("MAP *.example.com 127.0.0.1".to_string());
         options.window_size = Some((1024, 768));
-        options.chrome_flags = Some(vec!["--custom-flag".to_string()]);
+        options.browser_flags = Some(vec!["--custom-flag".to_string()]);
         options.additional_args = Some(vec!["--extra-arg".to_string()]);
         options.user_data_dir = Some("/tmp/test-data".to_string());
         options.port = Some(9999);
@@ -152,7 +153,7 @@ mod tests {
         assert_eq!(config.0, "https://test.com"); // starting_url
         assert_eq!(config.1, 9999); // port
         assert_eq!(config.13, Some(&(1024, 768))); // window_size
-        assert_eq!(config.14, &vec!["--custom-flag".to_string()]); // chrome_flags
+        assert_eq!(config.14, &vec!["--custom-flag".to_string()]); // browser_flags
         assert_eq!(config.15, &vec!["--extra-arg".to_string()]); // additional_args
         assert_eq!(config.16, "/tmp/test-data"); // user_data_dir
     }
@@ -194,4 +195,4 @@ mod tests {
         // Should not contain default flags like --disable-features=Translate
         assert!(!flags.contains(&"--disable-features=Translate".to_string()));
     }
-} 
+}

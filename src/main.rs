@@ -1,4 +1,4 @@
-use chrome_launcher::{Launcher, Options, BrowserType};
+use browser_launcher::{Launcher, Options, BrowserType};
 use clap::{Parser, ValueEnum};
 
 #[derive(Parser, Debug)]
@@ -8,11 +8,11 @@ struct Args {
     #[arg(long)]
     starting_url: Option<String>,
 
-    /// Sets Chrome flags (comma-separated)
+    /// Sets browser flags (comma-separated)
     #[arg(long)]
-    chrome_flags: Option<String>,
+    browser_flags: Option<String>,
 
-    /// Sets the port for Chrome
+    /// Sets the port for remote debugging
     #[arg(long)]
     port: Option<u16>,
 
@@ -84,7 +84,7 @@ struct Args {
     #[arg(long)]
     user_data_dir: Option<String>,
 
-    /// Additional Chrome arguments (comma-separated)
+    /// Additional browser arguments (comma-separated)
     #[arg(long)]
     additional_args: Option<String>,
 }
@@ -110,8 +110,8 @@ fn main() {
         options.starting_url = Some(url);
     }
 
-    if let Some(flags) = args.chrome_flags {
-        options.chrome_flags = Some(flags.split(',').map(String::from).collect());
+    if let Some(flags) = args.browser_flags {
+        options.browser_flags = Some(flags.split(',').map(String::from).collect());
     }
 
     if let Some(port) = args.port {
@@ -167,9 +167,9 @@ fn main() {
     let mut launcher = Launcher::new(options);
 
     match launcher.launch() {
-        Ok(mut launched_chrome) => {
-            println!("Launched browser with PID: {}", launched_chrome.pid);
-            let _ = launched_chrome
+        Ok(mut launched_browser) => {
+            println!("Launched browser with PID: {}", launched_browser.pid);
+            let _ = launched_browser
                 .process
                 .wait()
                 .map_err(|e: std::io::Error| e.to_string())
