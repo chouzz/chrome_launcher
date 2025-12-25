@@ -1,7 +1,6 @@
-use chrome_launcher::{Launcher, Options};
-use clap::{Parser, ValueEnum};
-use std::collections::HashMap;
+use crate::{Launcher, Options};
 use crate::browser::BrowserType;
+use clap::{Parser, ValueEnum};
 
 #[derive(Parser, Debug)]
 #[command(version, about, long_about = None)]
@@ -174,7 +173,7 @@ fn main() {
             let _ = launched_chrome
                 .process
                 .wait()
-                .map_err(|e| e.to_string())
+                .map_err(|e: std::io::Error| e.to_string())
                 .unwrap();
             println!("Browser process has exited.");
         }
@@ -185,7 +184,7 @@ fn main() {
     }
 }
 
-fn parse_window_size(size: &str) -> Option<(u32, u32)> {
+pub fn parse_window_size(size: &str) -> Option<(u32, u32)> {
     let parts: Vec<&str> = size.split('x').collect();
     if parts.len() == 2 {
         if let (Ok(width), Ok(height)) = (parts[0].parse::<u32>(), parts[1].parse::<u32>()) {

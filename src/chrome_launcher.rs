@@ -1,5 +1,6 @@
 use crate::browser::{Browser, BrowserFinder, BrowserType};
 use crate::flags::DEFAULT_FLAGS;
+use std::path::Path;
 use crate::utils::get_default;
 use std::collections::HashMap;
 use std::env;
@@ -151,6 +152,65 @@ impl Launcher {
             let _ = process.kill();
         }
         self.cleanup();
+    }
+
+    // Public getter methods for testing
+    #[cfg(test)]
+    pub fn get_starting_url(&self) -> &str {
+        &self.starting_url
+    }
+
+    #[cfg(test)]
+    pub fn get_port(&self) -> u16 {
+        self.port
+    }
+
+    #[cfg(test)]
+    pub fn is_headless(&self) -> bool {
+        self.headless
+    }
+
+    #[cfg(test)]
+    pub fn get_browser_type(&self) -> &BrowserType {
+        &self.browser_type
+    }
+
+    #[cfg(test)]
+    pub fn get_flags_for_test(&self) -> Vec<String> {
+        self.get_flags()
+    }
+
+    #[cfg(test)]
+    pub fn get_all_config(&self) -> (&str, u16, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, &BrowserType, Option<&(u32, u32)>, &Vec<String>, &Vec<String>, &str) {
+        (
+            &self.starting_url,
+            self.port,
+            self.headless,
+            self.incognito,
+            self.disable_gpu,
+            self.no_sandbox,
+            self.disable_web_security,
+            self.allow_running_insecure_content,
+            self.ignore_ssl_errors,
+            self.disable_extensions,
+            self.disable_plugins,
+            self.disable_images,
+            &self.browser_type,
+            self.window_size.as_ref(),
+            &self.chrome_flags,
+            &self.additional_args,
+            &self.user_data_dir,
+        )
+    }
+
+    #[cfg(test)]
+    pub fn test_get_flags(&self) -> Vec<String> {
+        self.get_flags()
+    }
+
+    #[cfg(test)]
+    pub fn test_get_chrome_path(&self) -> Result<String, String> {
+        self.get_chrome_path()
     }
 
     fn get_chrome_path(&self) -> Result<String, String> {

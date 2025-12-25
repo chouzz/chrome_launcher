@@ -172,6 +172,13 @@ impl Default for BrowserFinder {
 }
 
 impl BrowserFinder {
+    #[cfg(test)]
+    pub fn get_preferred_browsers(&self) -> &Vec<BrowserType> {
+        &self.preferred_browsers
+    }
+}
+
+impl BrowserFinder {
     /// Create a new BrowserFinder with custom preferences
     pub fn new(preferred_browsers: Vec<BrowserType>) -> Self {
         Self { preferred_browsers }
