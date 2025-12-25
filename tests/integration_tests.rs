@@ -113,7 +113,7 @@ mod integration_tests {
         let mut options = Options::default();
         options.chrome_path = Some("/usr/bin/google-chrome".to_string());
 
-        let launcher = Launcher::new(options);
+        let _launcher = Launcher::new(options);
         // Test passes if launcher can be created with custom path option
     }
 
