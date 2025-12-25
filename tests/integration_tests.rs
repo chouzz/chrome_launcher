@@ -21,7 +21,7 @@ mod integration_tests {
     #[test]
     fn test_browser_finder_preferred_order() {
         let preferred = vec![BrowserType::Chrome, BrowserType::Edge, BrowserType::Brave];
-        let finder = BrowserFinder::new(preferred.clone());
+        let _finder = BrowserFinder::new(preferred.clone());
 
         // Test passes if finder can be created without panicking
     }
@@ -36,7 +36,7 @@ mod integration_tests {
             ..Default::default()
         };
 
-        let launcher = Launcher::new(options);
+        let _launcher = Launcher::new(options);
         // Test passes if launcher can be created without panicking
     }
 
@@ -104,7 +104,7 @@ mod integration_tests {
             "--extra-flag".to_string(),
         ]);
 
-        let launcher = Launcher::new(options);
+        let _launcher = Launcher::new(options);
         // Test passes if launcher can be created with complex options without panicking
     }
 
@@ -113,7 +113,7 @@ mod integration_tests {
         let mut options = Options::default();
         options.chrome_path = Some("/usr/bin/google-chrome".to_string());
 
-        let launcher = Launcher::new(options);
+        let _launcher = Launcher::new(options);
         // Test passes if launcher can be created with custom path option
     }
 

@@ -1,4 +1,4 @@
-use crate::browser::{Browser, BrowserFinder, BrowserType};
+use crate::browser::{BrowserFinder, BrowserType};
 use crate::flags::DEFAULT_FLAGS;
 use std::path::Path;
 use crate::utils::get_default;
@@ -57,7 +57,9 @@ pub struct Launcher {
     env_vars: HashMap<String, String>,
     port: u16,
     ignore_default_flags: bool,
+    #[allow(dead_code)]
     connection_poll_interval: u64,
+    #[allow(dead_code)]
     max_connection_retries: u32,
     user_data_dir: String,
     chrome_flags: Vec<String>,

@@ -172,7 +172,7 @@ mod tests {
         let mut options = Options::default();
         options.env_vars = Some(env_vars);
 
-        let launcher = Launcher::new(options);
+        let _launcher = Launcher::new(options);
         // Test that env_vars is set by checking it doesn't panic
         // The actual env_vars field is private, so we test indirectly
         assert!(true); // Placeholder test - env vars functionality is tested elsewhere
