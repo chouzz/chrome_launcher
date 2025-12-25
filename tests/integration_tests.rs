@@ -131,7 +131,7 @@ mod integration_tests {
             ..Default::default()
         };
 
-        let launcher = Launcher::new(options);
+        let _launcher = Launcher::new(options);
         // Test passes if launcher can be created with minimal options
     }
 }
