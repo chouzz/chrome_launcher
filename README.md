@@ -1,15 +1,15 @@
-# Chrome Launcher
+# Browser Launcher
 
-[![Crates.io](https://img.shields.io/crates/v/chrome_launcher.svg)](https://crates.io/crates/chrome_launcher)
+[![Crates.io](https://img.shields.io/crates/v/browser_launcher.svg)](https://crates.io/crates/browser_launcher)
 [![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](LICENSE)
-[![Build Status](https://img.shields.io/github/actions/workflow/status/chouzz/chrome_launcher/ci.yml)](https://github.com/chouzz/chrome_launcher/actions)
+[![Build Status](https://img.shields.io/github/actions/workflow/status/chouzz/browser_launcher/ci.yml)](https://github.com/chouzz/browser_launcher/actions)
 
-A powerful, cross-platform Rust library for launching Chromium-based browsers with extensive configuration options. Supports Chrome, Edge, Brave, Opera, Vivaldi, and other Chromium browsers on Windows, macOS, and Linux.
+A powerful, cross-platform Rust library for launching browsers (Chrome, Edge, Safari, Firefox, etc.) with extensive configuration options. Supports multiple browsers on Windows, macOS, and Linux.
 
 ## Features
 
 - 🚀 **Cross-platform support**: Windows, macOS, and Linux
-- 🌐 **Multiple browsers**: Chrome, Chromium, Edge, Brave, Opera, Vivaldi
+- 🌐 **Multiple browsers**: Chrome, Chromium, Edge, Brave, Opera, Vivaldi, etc.
 - ⚙️ **Comprehensive options**: Headless, security, networking, and more
 - 🧪 **Well-tested**: Unit tests and integration tests included
 - 📦 **Easy to use**: Simple API with extensive CLI support
@@ -23,13 +23,13 @@ Add this to your `Cargo.toml`:
 
 ```toml
 [dependencies]
-chrome_launcher = "0.2.0"
+browser_launcher = "0.2.0"
 ```
 
 ### As a CLI Tool
 
 ```bash
-cargo install chrome_launcher
+cargo install browser_launcher
 ```
 
 ## Quick Start
@@ -37,7 +37,7 @@ cargo install chrome_launcher
 ### Library Usage
 
 ```rust
-use chrome_launcher::{Launcher, Options, BrowserType};
+use browser_launcher::{Launcher, Options, BrowserType};
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     let mut options = Options::default();
@@ -69,17 +69,17 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
 Launch Chrome with default settings:
 ```bash
-chrome_launcher_cli
+browser_launcher_cli
 ```
 
 Launch Edge in headless mode:
 ```bash
-chrome_launcher_cli --browser edge --headless --starting-url "https://example.com"
+browser_launcher_cli --browser edge --headless --starting-url "https://example.com"
 ```
 
 Launch with custom window size and security disabled:
 ```bash
-chrome_launcher_cli \
+browser_launcher_cli \
   --browser chrome \
   --window-size 1920x1080 \
   --disable-web-security \
@@ -90,7 +90,7 @@ chrome_launcher_cli \
 
 ### Browser Types
 
-The library supports multiple Chromium-based browsers:
+The library supports multiple browsers:
 
 - `BrowserType::Chrome` - Google Chrome
 - `BrowserType::ChromeCanary` - Google Chrome Canary
@@ -106,7 +106,7 @@ The library supports multiple Chromium-based browsers:
 The `Options` struct provides extensive configuration:
 
 ```rust
-use chrome_launcher::{Options, BrowserType};
+use browser_launcher::{Options, BrowserType};
 
 let options = Options {
     // Browser selection
@@ -115,7 +115,7 @@ let options = Options {
     // Basic settings
     starting_url: Some("https://example.com".to_string()),
     port: Some(9222),
-    user_data_dir: Some("/tmp/chrome-data".to_string()),
+    user_data_dir: Some("/tmp/browser-data".to_string()),
 
     // Launch modes
     headless: Some(true),
@@ -138,7 +138,7 @@ let options = Options {
     user_agent: Some("Custom User Agent".to_string()),
 
     // Additional flags
-    chrome_flags: Some(vec!["--custom-flag".to_string()]),
+    browser_flags: Some(vec!["--custom-flag".to_string()]),
     additional_args: Some(vec!["--extra-arg=value".to_string()]),
 
     ..Default::default()
@@ -150,7 +150,7 @@ let options = Options {
 The library automatically detects installed browsers:
 
 ```rust
-use chrome_launcher::{BrowserFinder, BrowserType};
+use browser_launcher::{BrowserFinder, BrowserType};
 
 let finder = BrowserFinder::default();
 let browsers = finder.find_all();
@@ -200,21 +200,21 @@ The CLI tool supports all major browser launch options:
 - `--starting-url <URL>`: Set initial URL to load
 
 ### Additional Arguments
-- `--chrome-flags <FLAGS>`: Additional Chrome flags (comma-separated)
+- `--browser-flags <FLAGS>`: Additional browser flags (comma-separated)
 - `--additional-args <ARGS>`: Additional arguments (comma-separated)
 
 ## Examples
 
 ### Headless Screenshots
 ```rust
-use chrome_launcher::{Launcher, Options, BrowserType};
+use browser_launcher::{Launcher, Options, BrowserType};
 
 let options = Options {
     browser: Some(BrowserType::Chrome),
     headless: Some(true),
     window_size: Some((1920, 1080)),
     starting_url: Some("https://example.com".to_string()),
-    chrome_flags: Some(vec![
+    browser_flags: Some(vec![
         "--screenshot=output.png".to_string(),
         "--hide-scrollbars".to_string(),
     ]),
@@ -227,7 +227,7 @@ launcher.launch()?;
 
 ### Web Scraping Setup
 ```rust
-use chrome_launcher::{Launcher, Options, BrowserType};
+use browser_launcher::{Launcher, Options, BrowserType};
 
 let options = Options {
     browser: Some(BrowserType::Chrome),
@@ -245,7 +245,7 @@ launcher.launch()?;
 
 ### Development with Extensions Disabled
 ```bash
-chrome_launcher_cli \
+browser_launcher_cli \
   --browser chrome \
   --disable-extensions \
   --disable-plugins \
@@ -254,7 +254,7 @@ chrome_launcher_cli \
 
 ### Testing with Security Disabled
 ```bash
-chrome_launcher_cli \
+browser_launcher_cli \
   --browser edge \
   --disable-web-security \
   --ignore-ssl-errors \
@@ -321,7 +321,7 @@ cargo build
 ### Running CLI
 
 ```bash
-cargo run --bin chrome_launcher_cli -- --help
+cargo run --bin browser_launcher_cli -- --help
 ```
 
 ### Code Structure
@@ -329,7 +329,7 @@ cargo run --bin chrome_launcher_cli -- --help
 ```
 src/
 ├── browser.rs          # Browser detection and types
-├── chrome_launcher.rs  # Main launcher implementation
+├── browser_launcher.rs  # Main launcher implementation
 ├── cli.rs             # CLI interface
 ├── flags.rs           # Default Chrome flags
 ├── lib.rs             # Library exports and tests

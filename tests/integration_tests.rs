@@ -1,4 +1,4 @@
-use chrome_launcher::{BrowserFinder, BrowserType, Launcher, Options};
+use browser_launcher::{BrowserFinder, BrowserType, Launcher, Options};
 
 #[cfg(test)]
 mod integration_tests {
@@ -96,7 +96,7 @@ mod integration_tests {
         options.user_agent = Some("TestAgent/1.0".to_string());
         options.proxy_server = Some("http://proxy.test:8080".to_string());
         options.window_size = Some((1280, 720));
-        options.chrome_flags = Some(vec![
+        options.browser_flags = Some(vec![
             "--custom-flag1".to_string(),
             "--custom-flag2=value".to_string(),
         ]);
@@ -109,9 +109,9 @@ mod integration_tests {
     }
 
     #[test]
-    fn test_launcher_get_chrome_path_with_custom_path() {
+    fn test_launcher_get_browser_path_with_custom_path() {
         let mut options = Options::default();
-        options.chrome_path = Some("/usr/bin/google-chrome".to_string());
+        options.browser_path = Some("/usr/bin/google-chrome".to_string());
 
         let _launcher = Launcher::new(options);
         // Test passes if launcher can be created with custom path option

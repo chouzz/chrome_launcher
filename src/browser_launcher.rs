@@ -13,11 +13,11 @@ use std::process::Command;
 #[derive(Debug)]
 pub struct Options {
     pub starting_url: Option<String>,
-    pub chrome_flags: Option<Vec<String>>,
+    pub browser_flags: Option<Vec<String>>,
     pub prefs: Option<HashMap<String, serde_json::Value>>,
     pub port: Option<u16>,
     pub handle_sigint: Option<bool>,
-    pub chrome_path: Option<String>,
+    pub browser_path: Option<String>,
     pub user_data_dir: Option<String>,
     pub log_level: Option<String>,
     pub ignore_default_flags: Option<bool>,
@@ -43,17 +43,17 @@ pub struct Options {
     pub additional_args: Option<Vec<String>>,
 }
 
-pub struct LaunchedChrome {
+pub struct LaunchedBrowser {
     pub pid: u32,
     pub port: u16,
     pub process: std::process::Child,
 }
 
 pub struct Launcher {
-    chrome_process: Option<std::process::Child>,
+    browser_process: Option<std::process::Child>,
     out_file: PathBuf,
     err_file: PathBuf,
-    chrome_path: Option<String>,
+    browser_path: Option<String>,
     env_vars: HashMap<String, String>,
     port: u16,
     ignore_default_flags: bool,
@@ -62,7 +62,7 @@ pub struct Launcher {
     #[allow(dead_code)]
     max_connection_retries: u32,
     user_data_dir: String,
-    chrome_flags: Vec<String>,
+    browser_flags: Vec<String>,
     starting_url: String,
     browser_type: BrowserType,
     headless: bool,
@@ -91,20 +91,20 @@ impl Launcher {
             .as_ref()
             .map(PathBuf::from)
             .unwrap_or_else(env::temp_dir);
-        let out_file = user_data_dir.join("chrome-out.log");
-        let err_file = user_data_dir.join("chrome-err.log");
+        let out_file = user_data_dir.join("browser-out.log");
+        let err_file = user_data_dir.join("browser-err.log");
         Self {
-            chrome_process: None,
+            browser_process: None,
             out_file,
             err_file,
-            chrome_path: opts.chrome_path,
+            browser_path: opts.browser_path,
             env_vars: get_default(opts.env_vars, || env::vars().collect()),
             port: get_default(opts.port, || 0),
             ignore_default_flags: get_default(opts.ignore_default_flags, || false),
             connection_poll_interval: get_default(opts.connection_poll_interval, || 500),
             max_connection_retries: get_default(opts.max_connection_retries, || 50),
             user_data_dir: get_default(opts.user_data_dir, || user_data_dir.to_string_lossy().to_owned().to_string()),
-            chrome_flags: get_default(opts.chrome_flags, || [].to_vec()),
+            browser_flags: get_default(opts.browser_flags, || [].to_vec()),
             starting_url: get_default(opts.starting_url, || "about:blank".to_owned()),
             browser_type: get_default(opts.browser, || BrowserType::Chrome),
             headless: get_default(opts.headless, || false),
@@ -126,13 +126,13 @@ impl Launcher {
         }
     }
 
-    pub fn launch(&mut self) -> Result<LaunchedChrome, String> {
-        let chrome_path = if let Some(ref path) = self.chrome_path {
+    pub fn launch(&mut self) -> Result<LaunchedBrowser, String> {
+        let browser_path = if let Some(ref path) = self.browser_path {
             path.as_str()
         } else {
-            &self.get_chrome_path()?
+            &self.get_browser_path()?
         };
-        let mut command = Command::new(chrome_path);
+        let mut command = Command::new(browser_path);
 
         command.args(self.get_flags());
         command.stdout(File::create(&self.out_file).map_err(|e| e.to_string())?);
@@ -141,16 +141,16 @@ impl Launcher {
 
         let child = command.spawn().map_err(|e| e.to_string())?;
         let pid = child.id();
-        self.chrome_process = Some(child);
+        self.browser_process = Some(child);
 
-        let process = self.chrome_process.take().unwrap();
+        let process = self.browser_process.take().unwrap();
         let port = self.port;
 
-        Ok(LaunchedChrome { pid, port, process })
+        Ok(LaunchedBrowser { pid, port, process })
     }
 
     pub fn kill(&mut self) {
-        if let Some(ref mut process) = self.chrome_process {
+        if let Some(ref mut process) = self.browser_process {
             let _ = process.kill();
         }
         self.cleanup();
@@ -199,7 +199,7 @@ impl Launcher {
             self.disable_images,
             &self.browser_type,
             self.window_size.as_ref(),
-            &self.chrome_flags,
+            &self.browser_flags,
             &self.additional_args,
             &self.user_data_dir,
         )
@@ -211,13 +211,13 @@ impl Launcher {
     }
 
     #[cfg(test)]
-    pub fn test_get_chrome_path(&self) -> Result<String, String> {
-        self.get_chrome_path()
+    pub fn test_get_browser_path(&self) -> Result<String, String> {
+        self.get_browser_path()
     }
 
-    fn get_chrome_path(&self) -> Result<String, String> {
+    fn get_browser_path(&self) -> Result<String, String> {
         // If a specific path is provided, use it
-        if let Some(ref path) = self.chrome_path {
+        if let Some(ref path) = self.browser_path {
             if Path::new(path).exists() {
                 return Ok(path.clone());
             } else {
@@ -240,6 +240,24 @@ impl Launcher {
     }
 
     fn get_flags(&self) -> Vec<String> {
+        let mut flags = match self.browser_type {
+            BrowserType::Chrome | BrowserType::ChromeCanary | BrowserType::Chromium | BrowserType::Edge | BrowserType::Brave | BrowserType::Opera | BrowserType::Vivaldi => {
+                self.get_chromium_flags()
+            }
+            BrowserType::Custom(_) => {
+                // Default to chromium flags for custom browsers if they are chromium-based
+                // In the future, we could detect or allow more specific custom flags
+                self.get_chromium_flags()
+            }
+        };
+
+        // Starting URL (must be last for most browsers)
+        flags.push(self.starting_url.clone());
+
+        flags
+    }
+
+    fn get_chromium_flags(&self) -> Vec<String> {
         let mut flags = if self.ignore_default_flags {
             vec![]
         } else {
@@ -334,13 +352,10 @@ impl Launcher {
         }
 
         // Additional custom flags
-        flags.extend(self.chrome_flags.clone());
+        flags.extend(self.browser_flags.clone());
 
         // Additional args from options
         flags.extend(self.additional_args.clone());
-
-        // Starting URL (must be last)
-        flags.push(self.starting_url.clone());
 
         flags
     }
