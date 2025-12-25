@@ -89,6 +89,9 @@ impl BrowserType {
             BrowserType::Opera => vec![
                 r"SOFTWARE\Opera Software\Opera Stable",
             ],
+            BrowserType::Vivaldi => vec![
+                r"SOFTWARE\Vivaldi",
+            ],
             _ => vec![],
         }
     }
@@ -380,6 +383,9 @@ impl BrowserFinder {
             ],
             BrowserType::Opera => vec![
                 "Opera\\launcher.exe",
+            ],
+            BrowserType::Vivaldi => vec![
+                "Vivaldi\\Application\\vivaldi.exe",
             ],
             _ => vec![],
         };
