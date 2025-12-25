@@ -429,9 +429,9 @@ impl BrowserFinder {
 
     #[cfg(target_os = "linux")]
     fn find_via_desktop_files(&self, browser_type: &BrowserType) -> Option<Browser> {
-        let desktop_dirs = vec![
-            "/usr/share/applications",
-            "/usr/local/share/applications",
+        let mut desktop_dirs = vec![
+            "/usr/share/applications".to_string(),
+            "/usr/local/share/applications".to_string(),
         ];
 
         if let Some(home) = home_dir() {
